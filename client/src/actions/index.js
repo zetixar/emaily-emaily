@@ -18,9 +18,9 @@ export const fetchUser = () => async dispatch => {
 }
 */
 
-export const logout = event => {
-	event.preventDefault()
-	return function(dispatch) {
-		axios.get('/auth/logout').then(dispatch({ type: LOGOUT }))
-	}
+export const logout = history => async dispatch => {
+	const res = await axios.get('/api/logout')
+
+	history.push('/')
+	dispatch({ type: LOGOUT })
 }

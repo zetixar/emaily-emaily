@@ -1,6 +1,10 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
+import { Link } from 'react-router-dom'
+
 import { logout } from '../actions'
+
 class Header extends Component {
 	renderContent() {
 		switch (this.props.auth) {
@@ -15,7 +19,14 @@ class Header extends Component {
 			default:
 				return (
 					<li>
-						<a onClick={this.props.logout}>logout</a>
+						<a
+							onClick={event => {
+								event.preventDefault()
+								this.props.logout(this.props.history)
+							}}
+						>
+							logout
+						</a>
 					</li>
 				)
 		}
@@ -24,7 +35,12 @@ class Header extends Component {
 		return (
 			<nav>
 				<div className="nav-wrapper">
-					<a className="left brand-logo">Emaily</a>
+					<Link
+						to={this.props.auth ? '/surveys' : '/'}
+						className="left brand-logo"
+					>
+						Emaily
+					</Link>
 					<ul className="right">
 						{this.renderContent()}
 					</ul>
@@ -39,4 +55,4 @@ function mapStateToProps({ auth }) {
 		auth
 	}
 }
-export default connect(mapStateToProps, { logout })(Header)
+export default connect(mapStateToProps, { logout })(withRouter(Header))
