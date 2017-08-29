@@ -24,5 +24,20 @@ app.use(passport.session())
 
 require('./routes/authRoutes')(app)
 
+if (process.env.NODE_ENV === 'production') {
+	// First, express tries to serve up production assets like
+	// our main.js or main.css files
+	app.use(express.static('client/build'))
+
+	// If express doesn't recognize the route that this request is comming from
+	// and therefore this request can't be resolved from the assets that we
+	// have in 'client/build':
+	// THEN express will serve up the index.html file.
+	const path = require('path')
+	app.get('*', (req, res) => {
+		res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
+	})
+}
+
 const PORT = process.env.PORT || 5000
 app.listen(PORT)
